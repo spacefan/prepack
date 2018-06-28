@@ -13,6 +13,7 @@ import type { Realm } from "../../realm.js";
 import {
   Value,
   AbstractValue,
+  BooleanValue,
   ConcreteValue,
   FunctionValue,
   StringValue,
@@ -74,6 +75,7 @@ export function createAbstract(
   }
 
   let { type, template, functionResultType } = parseTypeNameOrTemplate(realm, typeNameOrTemplate);
+  let values = type === BooleanValue ? [realm.intrinsics.true, realm.intrinsics.false] : [];
 
   let result;
   let locString,
@@ -102,7 +104,7 @@ export function createAbstract(
     } else {
       realm.saveNameString(name);
     }
-    result = AbstractValue.createFromTemplate(realm, buildExpressionTemplate(name), type, [], kind);
+    result = AbstractValue.createFromTemplate(realm, buildExpressionTemplate(name), type, values, kind);
     result.intrinsicName = name;
   }
 
